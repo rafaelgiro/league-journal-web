@@ -2,8 +2,18 @@ html,
 body {
   padding: 0;
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
-    Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+  font-family: "Patrick Hand", cursive;
+  letter-spacing: 0.25rem;
+  height: 100%;
+}
+
+#__next,
+#__next > div {
+  height: 100%;
+}
+
+h1 {
+  font-size: 4rem;
 }
 
 a {
