@@ -14,7 +14,7 @@ type Region =
   | "tr1"
   | "ru";
 
-interface Account {
+interface Account extends RiotResponse {
   id: SummonerId;
   accountId: AccountId;
   puuid: PUUID;
@@ -24,7 +24,7 @@ interface Account {
   summonerLevel: number;
 }
 
-interface LiveMatch {
+interface LiveMatch extends RiotResponse {
   gameId: number;
   mapId: number;
   gameMode: string;
@@ -61,4 +61,8 @@ interface Champion {
   name: string;
   key: string;
   id: string;
+}
+
+interface RiotResponse {
+  status?: { message: string; status_code: number };
 }
