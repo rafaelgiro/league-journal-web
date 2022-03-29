@@ -9,7 +9,7 @@ export default async function handler(
     | {
         account: Account;
         match: LiveMatch;
-        champions: Champion[];
+        champions: { allyChampions: Champion[]; enemyChampions: Champion[] };
       }
     | { code: string; error: string }
   >
@@ -32,7 +32,10 @@ export default async function handler(
   if (match.status?.status_code === 404)
     res.status(404).json({ code: "LJ-003", error: "Match not found" });
 
-  const champions = await mapChampions(match.participants);
+  const champions = await mapChampions(
+    match.participants,
+    query.summonerName as string
+  );
 
   res.status(200).json({ account, match, champions });
 }
