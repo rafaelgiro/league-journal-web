@@ -10,6 +10,7 @@ function getTeamChampions(
 
 /**
  * find champion data based on champions currently on the game
+ * TODO: can be refactored to use less .map() but it's late
  */
 export async function mapChampions(
   participants: LiveMatch["participants"],
