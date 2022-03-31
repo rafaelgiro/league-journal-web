@@ -1,11 +1,20 @@
 function getTeamChampions(
   team: LiveMatch["participants"],
-  champions: Champion[]
+  champions: Champion[],
+  summonerName: string
 ) {
   const players = team.map((part) => part.championId);
+  const summonerChampion = team.find(
+    (part) => part.summonerName === summonerName
+  )?.championId;
   return champions
     .filter((champ) => players.includes(Number(champ.key)))
-    .map((champ) => ({ id: champ.id, key: champ.key, name: champ.name }));
+    .map((champ) => ({
+      id: champ.id,
+      key: champ.key,
+      name: champ.name,
+      isMe: champ.key === String(summonerChampion),
+    }));
 }
 
 /**
@@ -34,8 +43,8 @@ export async function mapChampions(
   const blueTeam = participants.filter((part) => part.teamId === 100);
   const redTeam = participants.filter((part) => part.teamId === 200);
 
-  const blueChampions = getTeamChampions(blueTeam, champions);
-  const redChampions = getTeamChampions(redTeam, champions);
+  const blueChampions = getTeamChampions(blueTeam, champions, summonerName);
+  const redChampions = getTeamChampions(redTeam, champions, summonerName);
 
   return {
     allyChampions: summonerOnBlueTeam ? blueChampions : redChampions,
