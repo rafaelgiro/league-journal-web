@@ -5,7 +5,7 @@ function getTeamChampions(
 ) {
   const players = team.map((part) => part.championId);
   const summonerChampion = team.find(
-    (part) => part.summonerName === summonerName
+    (part) => part.summonerName.replace(/\s/gi, "") === summonerName
   )?.championId;
   return champions
     .filter((champ) => players.includes(Number(champ.key)))
@@ -29,6 +29,7 @@ export async function mapChampions(
     "https://ddragon.leagueoflegends.com/api/versions.json"
   );
   const patches = await patchRes.json();
+  const sanitezedName = summonerName.replace(/\s/gi, "");
 
   const championsRes = await fetch(
     `http://ddragon.leagueoflegends.com/cdn/${patches[0]}/data/en_US/champion.json`
@@ -37,14 +38,15 @@ export async function mapChampions(
   const champions = Object.values(allChampions.data) as Champion[];
 
   const summonerOnBlueTeam =
-    participants.find((part) => part.summonerName === summonerName)?.teamId ===
-    100;
+    participants.find(
+      (part) => part.summonerName.replace(/\s/gi, "") === sanitezedName
+    )?.teamId === 100;
 
   const blueTeam = participants.filter((part) => part.teamId === 100);
   const redTeam = participants.filter((part) => part.teamId === 200);
 
-  const blueChampions = getTeamChampions(blueTeam, champions, summonerName);
-  const redChampions = getTeamChampions(redTeam, champions, summonerName);
+  const blueChampions = getTeamChampions(blueTeam, champions, sanitezedName);
+  const redChampions = getTeamChampions(redTeam, champions, sanitezedName);
 
   return {
     allyChampions: summonerOnBlueTeam ? blueChampions : redChampions,
