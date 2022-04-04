@@ -17,7 +17,7 @@ export default async function handler(
   const { query } = req;
 
   if (!query.summonerName || !query.region)
-    res.status(400).json({ code: "LJ-001", error: "Missing query" });
+    return res.status(400).json({ code: "LJ-001", error: "Missing query" });
 
   const account = await getAccountData(
     query.summonerName as string,
@@ -25,17 +25,19 @@ export default async function handler(
   );
 
   if (account.status?.status_code === 404)
-    res.status(404).json({ code: "LJ-002", error: "Summoner not found" });
+    return res
+      .status(404)
+      .json({ code: "LJ-002", error: "Summoner not found" });
 
   const match = await getLiveMatch(account.id, query.region as Region);
 
   if (match.status?.status_code === 404)
-    res.status(404).json({ code: "LJ-003", error: "Match not found" });
+    return res.status(404).json({ code: "LJ-003", error: "Match not found" });
 
   const champions = await mapChampions(
     match.participants,
     query.summonerName as string
   );
 
-  res.status(200).json({ account, match, champions });
+  return res.status(200).json({ account, match, champions });
 }
