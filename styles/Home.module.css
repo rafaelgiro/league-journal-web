@@ -23,6 +23,10 @@
   justify-content: space-evenly;
 }
 
+.store a {
+  text-decoration: none;
+}
+
 @media (max-width: 600px) {
   .logo {
     flex-direction: column;
